@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>There's not enough time</title>
+
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/8.2.4/firebase-app.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/8.2.4/firebase-auth.js"></script>
+    <script defer src="/__/firebase/8.2.4/firebase-database.js"></script>
+    <script defer src="/__/firebase/8.2.4/firebase-firestore.js"></script>
+    <script defer src="/__/firebase/8.2.4/firebase-functions.js"></script>
+    <script defer src="/__/firebase/8.2.4/firebase-messaging.js"></script>
+    <script defer src="/__/firebase/8.2.4/firebase-storage.js"></script>
+    <script defer src="/__/firebase/8.2.4/firebase-analytics.js"></script>
+    <script defer src="/__/firebase/8.2.4/firebase-remote-config.js"></script>
+    <script defer src="/__/firebase/8.2.4/firebase-performance.js"></script>
+    <!--
+      initialize the SDK after all desired features are loaded, set useEmulator to false
+      to avoid connecting the SDK to running emulators.
+    -->
+    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+
+    <style>
+    div {font-size: 30px;font-family: 'Courier New', monospace;}
+    h1 {text-align: center;font-family: 'Courier New', monospace;font-size: 50px;}
+    .row {display: flex;}
+    .columnleft {flex: 50%;padding-left: 23%}
+    .columnright {flex: 50%;}
+    </style>
+
+  </head>
+  <body>
+    <h1> Stop Wasting Time</h1>
+    <div id="text">
+      <div class="row">
+        <div class="columnleft">
+          <p id="minute-text">
+
+          </p>
+          <p id="hour-text">
+
+          </p>
+          <p id="day-text">
+
+          </p>
+          <p id="week-text">
+
+          </p>
+          <p id="month-text">
+
+          </p>
+          <p id="year-text">
+
+          </p>
+          <p id="decade-text">
+
+          </p>
+          <p id="century-text">
+
+          </p>
+          <p id="millenium-text">
+            
+          </p>
+        </div>
+        <div class="columnright">
+          <p id="minute-bar">
+
+          </p>
+          <p id="hour-bar">
+
+          </p>
+          <p id="day-bar">
+
+          </p>
+          <p id="week-bar">
+
+          </p>
+          <p id="month-bar">
+
+          </p>
+          <p id="year-bar">
+
+          </p>
+          <p id="decade-bar">
+
+          </p>
+          <p id="century-bar">
+
+          </p>
+          <p id="millenium-bar">
+
+          </p>
+        </div>
+      </div>
+    </div>
+
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const loadEl = document.querySelector('#load');
+        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+        // // The Firebase SDK is initialized and available here!
+        //
+        // firebase.auth().onAuthStateChanged(user => { });
+        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
+        // firebase.firestore().doc('/foo/bar').get().then(() => { });
+        // firebase.functions().httpsCallable('yourFunction')().then(() => { });
+        // firebase.messaging().requestPermission().then(() => { });
+        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
+        // firebase.analytics(); // call to activate
+        // firebase.analytics().logEvent('tutorial_completed');
+        // firebase.performance(); // call to activate
+        //
+        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+
+        try {
+          let app = firebase.app();
+          let features = [
+            'auth',
+            'database',
+            'firestore',
+            'functions',
+            'messaging',
+            'storage',
+            'analytics',
+            'remoteConfig',
+            'performance',
+          ].filter(feature => typeof app[feature] === 'function');
+          loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
+        } catch (e) {
+          console.error(e);
+          loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
+        }
+      });
+
+      function update_time() {
+        var date = new Date();
+        var prev = date.getSeconds();
+
+        var minutes = (Math.round(((date.getSeconds() / 60 * 100) + Number.EPSILON) * 100) / 100).toFixed(2);
+        prev = date.getSeconds() / 60;
+
+        var hour = (Math.round((((date.getMinutes() + prev)  / 60 * 100) + Number.EPSILON) * 100) / 100).toFixed(2);
+        prev = date.getMinutes() / 60;
+
+        var day = (Math.round((((date.getHours() + prev)  / 24 * 100) + Number.EPSILON) * 100) / 100).toFixed(2);
+        prev = date.getHours() / 24;
+
+
+        var week = (Math.round((((date.getDay() + prev)  / 7 * 100) + Number.EPSILON) * 100) / 100).toFixed(2);
+
+
+        var month = (Math.round((((date.getDate())  / 31 * 100) + Number.EPSILON) * 100) / 100).toFixed(2);
+
+        var now = new Date();
+        var start = new Date(now.getFullYear(), 0, 0);
+        var diff = (now - start) + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
+        var oneDay = 1000 * 60 * 60 * 24;
+        var day_year = Math.floor(diff / oneDay);
+        var year = (Math.round((((day_year + prev)  / 365 * 100) + Number.EPSILON) * 100) / 100).toFixed(2);
+        prev = day_year / 365;
+
+        var decade = (Math.round((((date.getFullYear())  / 10 * 100) + Number.EPSILON) * 100) / 100).toFixed(2);
+
+
+        document.getElementById("minute-text").innerText = minutes + "% of the minute has passed.";
+        update_progress_bar("minute-bar", minutes);
+
+        document.getElementById("hour-text").innerText = hour + "% of the hour has passed.";
+        update_progress_bar("hour-bar", hour);
+
+        document.getElementById("day-text").innerText = day + "% of the day has passed.";
+        update_progress_bar("day-bar", day);
+
+        document.getElementById("week-text").innerText = week + "% of the week has passed.";
+        update_progress_bar("week-bar", week);
+
+        document.getElementById("month-text").innerText = month + "% of the month has passed.";
+        update_progress_bar("month-bar", month);
+
+        document.getElementById("year-text").innerText = year + "% of the year has passed.";
+        update_progress_bar("year-bar", year);
+
+
+
+
+
+        var t = setInterval(function(){update_time()}, 1000);
+      }
+
+      function update_progress_bar(id, value) {
+        var percent = Math.round(value / 10);
+        var bar = "▓".repeat(percent).concat("░".repeat(10-percent));
+
+
+        document.getElementById(id).innerText = bar;
+      }
+
+      update_time();
+
+    </script>
+  </body>
+</html>
